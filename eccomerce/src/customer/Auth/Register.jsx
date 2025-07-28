@@ -1,18 +1,18 @@
 import { Button, Grid, TextField } from '@mui/material'
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getUser, register } from '../../State/Auth/Action';
-import { store } from '../../State/store';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { registerUser } from '../../store/slices/authSlice';
 
 
 
 const Register = () => {
 
     const navigate=useNavigate();
-    const dispatch=useDispatch();
+    const dispatch = useAppDispatch();
    //const jwt=localStorage.getItem("jwt")
-    const {auth}=useSelector(store=>store)
+    const { isLoading, error } = useAppSelector(state => state.auth);
 
     // useEffect(()=>{
     //        if(jwt){
@@ -32,7 +32,7 @@ const Register = () => {
             email:data.get("email"),
             password:data.get("password")
         }
-        dispatch(register(userData))
+        dispatch(registerUser(userData))
 
         console.log("userData ",userData)
      
@@ -77,14 +77,20 @@ const Register = () => {
                      fullWidth
                      autoComplete='password'/>
                 </Grid>
+                {error && (
+                    <Grid item xs={12}>
+                        <div className="text-red-500 text-sm">{error}</div>
+                    </Grid>
+                )}
                 <Grid item xs={12} >
                     <Button 
                     className='bg-[#9155FD] w-full'
                     type='submit'
                     variant="contained"
                     size='large'
+                    disabled={isLoading}
                     sx={{padding:".8rem 0",bgcolor:"#9155FD"}}>
-                        Register
+                        {isLoading ? 'Registering...' : 'Register'}
                     </Button>
                 </Grid>
 

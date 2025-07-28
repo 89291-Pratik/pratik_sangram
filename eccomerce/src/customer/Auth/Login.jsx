@@ -1,22 +1,23 @@
 import { Button, Grid, TextField } from '@mui/material'
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { getUser, login } from '../../State/Auth/Action'
+import { useAppDispatch } from '../../hooks/useAppDispatch'
+import { useAppSelector } from '../../hooks/useAppSelector'
+import { loginUser, getUserProfile } from '../../store/slices/authSlice'
 
 const Login = () => {
-    const dispatch=useDispatch();
+    const dispatch = useAppDispatch();
     const navigate=useNavigate();
     const jwt=localStorage.getItem("jwt")
-    const {auth}=useSelector(store=>store)
+    const { isLoading, error, jwt: authJwt } = useAppSelector(state => state.auth);
 
 
     useEffect(() => {
         if (jwt) {
             console.log(jwt)
-            dispatch(getUser(jwt)); // Dispatch only if JWT is present
+            dispatch(getUserProfile(jwt)); // Dispatch only if JWT is present
         }
-    }, [jwt, auth.jwt]); // Listen for auth.jwt changes
+    }, [jwt, authJwt, dispatch]); // Listen for auth.jwt changes
     
     const handleSubmit=(event)=>{
         event.preventDefault();
@@ -28,7 +29,7 @@ const Login = () => {
             email:data.get("email"),
             password:data.get("password")
         }
-        dispatch(login(userData))
+        dispatch(loginUser(userData))
 
         console.log("userData ",userData)
      
@@ -57,14 +58,20 @@ const Login = () => {
                      fullWidth
                      autoComplete='password'/>
                 </Grid>
+                {error && (
+                    <Grid item xs={12}>
+                        <div className="text-red-500 text-sm">{error}</div>
+                    </Grid>
+                )}
                 <Grid item xs={12} >
                     <Button 
                     className='bg-[#9155FD] w-full'
                     type='submit'
                     variant="contained"
                     size='large'
+                    disabled={isLoading}
                     sx={{padding:".8rem 0",bgcolor:"#9155FD"}}>
-                        Login
+                        {isLoading ? 'Logging in...' : 'Login'}
                     </Button>
                 </Grid>
 

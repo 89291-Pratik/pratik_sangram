@@ -18,8 +18,9 @@ import TextField from "@mui/material/TextField";
 import { navigation } from "./navigationData";
 import { useLocation, useNavigate } from "react-router-dom";
 import AuthModel from "../../Auth/AuthModel";
-import { useDispatch, useSelector } from "react-redux";
-import { getUser, logout } from "../../../State/Auth/Action";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { useAppSelector } from "../../../hooks/useAppSelector";
+import { getUserProfile, logout } from "../../../store/slices/authSlice";
 
 
 function classNames(...classes) {
@@ -34,8 +35,8 @@ export default function Navigation() {
   const [anchorEl, setAnchorEl] = useState(null);
   const openUserMenu = Boolean(anchorEl);
   const jwt = localStorage.getItem("jwt");
-  const {auth}=useSelector(store=>store)
-  const dispatch=useDispatch();
+  const { user, isAuthenticated } = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
   const location=useLocation();
  
   
@@ -65,12 +66,12 @@ export default function Navigation() {
 useEffect(()=>{
   if(jwt)
   {
-    dispatch(getUser(jwt))
+    dispatch(getUserProfile(jwt))
   }
-},[jwt])
+},[jwt, dispatch])
   
 useEffect(()=>{
-  if(auth.jwt)
+  if(isAuthenticated)
   {
     handleClose()
   }
@@ -78,7 +79,7 @@ useEffect(()=>{
   {
     navigate(-1)
   }
-},[auth.jwt])
+},[isAuthenticated, location.pathname, navigate])
 
 const handleLogout=()=>{
   dispatch(logout())
@@ -416,7 +417,7 @@ const handleLogout=()=>{
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  {auth.user?.firstName ? (
+                  {user?.firstName ? (
                     <div>
                       <Avatar
                         className="text-white"
@@ -431,7 +432,7 @@ const handleLogout=()=>{
                           cursor: "pointer",
                         }}
                       >
-                       {auth.user?.firstName[0].toUpperCase()}
+                       {user?.firstName[0].toUpperCase()}
                       </Avatar>
                      
                       <Menu
@@ -444,7 +445,7 @@ const handleLogout=()=>{
                         }}
                       >
                         <MenuItem onClick={()=>navigate("/account/order")}>
-                          {/* {auth.user?.role === "ROLE_ADMIN" */}
+                          {/* {user?.role === "ROLE_ADMIN" */}
                             {/* ? "Admin Dashboard"
                             : "My Orders"} */}
                             My Orders
