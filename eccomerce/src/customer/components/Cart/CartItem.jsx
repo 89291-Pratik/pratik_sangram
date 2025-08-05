@@ -2,19 +2,25 @@ import { Button, IconButton } from '@mui/material'
 import React from 'react'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { useDispatch } from 'react-redux';
-import { removeCartItem, updateCartItem } from '../../../State/Cart/Action';
+import { useAppDispatch } from '../../../hooks/useAppDispatch';
+import { removeFromCart, updateCartItem, fetchCart } from '../../../store/slices/cartSlice';
 
 const CartItem = ({item}) => {
+
      const dispatch=useDispatch()
+
+    const dispatch = useAppDispatch()
+
     const handleUpdateCartItem=(num)=>{
-        const data={data:{quantity:item.quantity+num},cartItemId:item?.cartItemId}
+        const data = { quantity: item.quantity + num };
         console.log(data)
-        // dispatch(updateCartItem(data))
+        dispatch(updateCartItem({ cartItemId: item.id, data }))
+            .then(() => dispatch(fetchCart()));
 
     }
     const handleRemoveCartItem=()=>{
-        dispatch(removeCartItem(item.cartItemId))
+        dispatch(removeFromCart(item.id))
+            .then(() => dispatch(fetchCart()));
     }
   return (
     <div className='p-5 shadow-lg border rounded-md'>
