@@ -3,6 +3,8 @@ import MainCarosel from '../../components/Navigation/HomeCarosel/MainCarosel'
 import HomeSectionCarosel from '../../components/HomeSectionCarosel/HomeSectionCarosel'
 import mens_kurta from '../../../Data/mens_kurta'
 
+import Carousel from "../../components/Navigation/HomeCarosel/Carosel"
+
 
 const HomePage = () => {
     return (

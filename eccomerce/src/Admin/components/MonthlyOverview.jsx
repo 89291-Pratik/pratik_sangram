@@ -1,109 +1,83 @@
-import { TrendingUp } from '@mui/icons-material'
-import React from 'react'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import SettingsCellIcon from '@mui/icons-material/SettingsCell';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import { Avatar, Box, Card, CardContent, CardHeader, Grid, IconButton, Typography } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import React from 'react';
+import { TrendingUp, Users, Package, DollarSign, MoreVertical } from 'lucide-react';
 
-const salesData=[
-    {
-        stats:'245K',
-        title:"Sales",
-        color:"#E5D68A",
-        icon:<TrendingUp sx={{fontSize:"1.75rem"}}/>
-    },
-    {
-        stats:'12.5K',
-        title:"Customers",
-        color:"#22CB5C",
-        icon:<AccountCircleIcon sx={{fontSize:"1.75rem"}}/>
-    },
-    {
-        stats:'1.54K',
-        title:"Products",
-        color:"#DE4839",
-        icon:<SettingsCellIcon sx={{fontSize:"1.75rem"}}/>
-    },
-    {
-        stats:'88K',
-        title:"Revenue",
-        color:"#12B0E8",
-        icon:<AttachMoneyIcon sx={{fontSize:"1.75rem"}}/>
-    }
-
-]
-
-const renderStats=()=>{
-    return salesData.map((item,index)=>(
-        <Grid item xs={12} sm={3} key={index}>
-            <Box sx={{
-                display:"flex",alignItems:'center'
-            }}>
-                <Avatar variant='rounded' sx={{
-                    mr:3,
-                    width:44,
-                    height:44,
-                    boxShadow:3,
-                    color:"common.white",
-                    background:`${item.color}`
-                }}>
-                    {item.icon}
-
-
-                </Avatar>
-
-                <Box sx={{display:"flex",flexDirection:'column'}}>
-
-                    <Typography variant='caption'>{item.title}</Typography>
-                    <Typography variant='h6'>{item.stats}</Typography>
-
-                </Box>
-            </Box>
-        </Grid>
-
-    ))
-}
+const salesData = [
+  {
+    stats: '245K',
+    title: "Sales",
+    color: "from-yellow-400 to-orange-500",
+    icon: <TrendingUp className="w-6 h-6" />,
+    change: "+12.5%",
+    changeType: "increase"
+  },
+  {
+    stats: '12.5K',
+    title: "Customers",
+    color: "from-green-400 to-emerald-500",
+    icon: <Users className="w-6 h-6" />,
+    change: "+8.2%",
+    changeType: "increase"
+  },
+  {
+    stats: '1.54K',
+    title: "Products",
+    color: "from-red-400 to-pink-500",
+    icon: <Package className="w-6 h-6" />,
+    change: "+3.1%",
+    changeType: "increase"
+  },
+  {
+    stats: '88K',
+    title: "Revenue",
+    color: "from-blue-400 to-cyan-500",
+    icon: <DollarSign className="w-6 h-6" />,
+    change: "+15.3%",
+    changeType: "increase"
+  }
+];
 
 const MonthlyOverview = () => {
   return (
-   <Card sx={{}}>
-    <CardHeader title="Monthly Overview"
-    action={
-        <IconButton size='small'>
-            <MoreVertIcon/>
-        </IconButton>
-    }
-    subheader={
-        <Typography variant='body2'>
-            <Box component="span" sx={{fontWeight:600,mx:1}}>
-                Total 48.5% growth
+    <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-xl font-bold text-gray-900 mb-1">Monthly Overview</h2>
+          <p className="text-gray-600 text-sm">
+            <span className="font-semibold text-green-600">Total 48.5% growth</span> this month
+          </p>
+        </div>
+        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+          <MoreVertical className="w-5 h-5 text-gray-500" />
+        </button>
+      </div>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {salesData.map((item, index) => (
+          <div key={index} className="group">
+            <div className="flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 transition-all duration-200">
+              <div className={`p-3 rounded-xl bg-gradient-to-r ${item.color} text-white shadow-lg group-hover:scale-110 transition-transform duration-200`}>
+                {item.icon}
+              </div>
+              
+              <div className="flex-1">
+                <p className="text-gray-600 text-sm font-medium">{item.title}</p>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold text-gray-900">{item.stats}</span>
+                  <span className={`text-xs px-2 py-1 rounded-full ${
+                    item.changeType === 'increase' 
+                      ? 'bg-green-100 text-green-700' 
+                      : 'bg-red-100 text-red-700'
+                  }`}>
+                    {item.change}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
-            </Box>
-
-            this month
-
-        </Typography>
-    }
-    titleTypographyProps={{
-        sx:{
-            mb:2.5,
-            lineHeight:'2rem !important',
-            letterSpacing:'.15px !important'
-        }
-    }}
-    />
-    <CardContent sx={{pt:theme=>`${theme.spacing(3)} !important`}}>
-        <Grid container spacing={[5,0]}>
-            {renderStats()}
-
-        </Grid>
-
-    </CardContent>
-
-   
-   </Card>
-  )
-}
-
-export default MonthlyOverview
+export default MonthlyOverview;
