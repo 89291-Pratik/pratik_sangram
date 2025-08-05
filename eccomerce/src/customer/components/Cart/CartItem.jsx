@@ -6,7 +6,11 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch';
 import { removeFromCart, updateCartItem, fetchCart } from '../../../store/slices/cartSlice';
 
 const CartItem = ({item}) => {
+
+     const dispatch=useDispatch()
+
     const dispatch = useAppDispatch()
+
     const handleUpdateCartItem=(num)=>{
         const data = { quantity: item.quantity + num };
         console.log(data)
